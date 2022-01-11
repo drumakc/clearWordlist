@@ -12,8 +12,8 @@ namespace clearWordlist
     {
         static async Task Main(String[] args)
         {
-            string pathInput = @"c:\hashcat\wordlist\input.txt";
-            string pathOutput = @"c:\hashcat\wordlist\output.txt";
+            string pathInput = @"input.txt";
+            string pathOutput = @"output.txt";
             FileInfo fiInput = new FileInfo(pathInput);
             FileInfo fiOutput = new FileInfo(pathOutput);
             List<string> buffer = new List<string>();
@@ -77,7 +77,15 @@ namespace clearWordlist
                     {
                         sw.WriteLine(item);
                     }
-                }                
+                } 
+
+                Console.WriteLine('XXXXXXXXXX  XX      XX');  
+                Console.WriteLine('XXXXXXXXXX  XX    XX');
+                Console.writeLine('XX      XX  XX  XX');
+                Console.WriteLine('XX      XX  XXXX');
+                Console.WriteLine('XX      XX  XX  XX');  
+                Console.WriteLine('XXXXXXXXXX  XX    XX'); 
+                Console.WriteLine('XXXXXXXXXX  XX      XX');            
             }
             else 
             {
