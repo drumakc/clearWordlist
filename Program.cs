@@ -81,28 +81,26 @@ namespace clearWordlist
 
                 //удаляю файл input.txt
                 File.Delete(pathInput);
-                using (FileInfo fi = new FileInfo(pathInput))
+                FileInfo fi = new FileInfo(pathInput);
+                
+                if (fi.Exists)
                 {
-                     if (fi.Exists)
-                     {
-                        Console.WriteLine("!!!!   Файл input.txt не был удален.   !!!!");
-                     }
-                     else
-                     {
-                        Console.WriteLine("Файл input.txt удален.");
-                        Console.WriteLine("");
-
-                        Console.WriteLine("XXXXXXXXXX  XX      XX");  
-                        Console.WriteLine("XXXXXXXXXX  XX    XX");
-                        Console.writeLine("XX      XX  XX  XX");
-                        Console.WriteLine("XX      XX  XXXX");
-                        Console.WriteLine("XX      XX  XX  XX");  
-                        Console.WriteLine("XXXXXXXXXX  XX    XX"); 
-                        Console.WriteLine("XXXXXXXXXX  XX      XX");
-                     }
+                   Console.WriteLine("");
+                   Console.WriteLine("!!!!   Файл input.txt не был удален.   !!!!");
                 }
-
-                            
+                else
+                {
+                   Console.WriteLine("");
+                   Console.WriteLine("Файл input.txt удален.");
+                   Console.WriteLine("");
+                   Console.WriteLine("XXXXXXXXXX  XX      XX");  
+                   Console.WriteLine("XXXXXXXXXX  XX    XX");
+                   Console.WriteLine("XX      XX  XX  XX");
+                   Console.WriteLine("XX      XX  XXXX");
+                   Console.WriteLine("XX      XX  XX  XX");  
+                   Console.WriteLine("XXXXXXXXXX  XX    XX"); 
+                   Console.WriteLine("XXXXXXXXXX  XX      XX");
+                }                           
             }
             else 
             {

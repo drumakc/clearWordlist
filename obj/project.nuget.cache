@@ -1,12 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "7WZ1RMza7v2d6y8Kcfn/Zea+dYbSp/4/2zrpaf08Yeq2VxH9e++7azySxv21Jgk7VG0MY3Q4hmk0SHzpzq0aXQ==",
+  "dgSpecHash": "s2OgNv/0FYP+aJvtK/pGSqxtIEh4JATrkyKSIideI1xihGSdpC2ijOubeTkbs8lh70l9IhhusgmQwVrcIByVLA==",
   "success": true,
   "projectFilePath": "C:\\Users\\575\\MyApp\\MyApp.csproj",
-  "expectedPackageFiles": [
-    "C:\\Users\\575\\.nuget\\packages\\microsoft.netcore.app.runtime.linux-arm\\6.0.1\\microsoft.netcore.app.runtime.linux-arm.6.0.1.nupkg.sha512",
-    "C:\\Users\\575\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.linux-arm\\6.0.1\\microsoft.aspnetcore.app.runtime.linux-arm.6.0.1.nupkg.sha512",
-    "C:\\Users\\575\\.nuget\\packages\\microsoft.netcore.app.host.linux-arm\\6.0.1\\microsoft.netcore.app.host.linux-arm.6.0.1.nupkg.sha512"
-  ],
+  "expectedPackageFiles": [],
   "logs": []
 }
