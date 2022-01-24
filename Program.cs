@@ -1,5 +1,5 @@
-﻿/*
-Копирует из файла input.txt уникальные слова длиннее семи символов в файл output.txt.
+/*
+Соединяет словари очищая их от слов короче восьми символов и дубликатов
 */
 
 using System;
@@ -10,132 +10,94 @@ namespace clearWordlist
 {
     class Program
     {
-        static async Task Main(String[] args)
-        {
-            do
+        static async Task Main(String[] arr)
+        { 
+            //ищу внутри папки wordlist файл из трех символов, 
+            //первый из которых "х"
+            String[] abc = {"a", "b", "c", "d", "e", "f", "g",
+                "h", "i", "j", "k", "l", "m", "n", "o", "p", "q",
+                "r", "s", "t", "u", "v", "w", "x", "y", "z"};
+
+            for (int i = 0; i < abc.Length; i++)
             {
-                string pathInput = @"input.txt";
-                string pathOutput = @"output.txt";
-                FileInfo fiInput = new FileInfo(pathInput);
-                FileInfo fiOutput = new FileInfo(pathOutput);
-                List<string> buffer = new List<string>();
-
-                if (fiInput.Exists)
+                for (int j = 0; j < abc.Length; j++)
                 {
-                    Console.WriteLine("Файл input.txt найден.");                             
-                }
-                else 
-                {
-                    Console.WriteLine("Файл input.txt не найден.");
+                    string name = "x" + abc[i] + abc[j];
+                    string pathA = @$"wordlist\{name}.txt";
+                    FileInfo fiA = new FileInfo(pathA);
                     
-                    String[] abc = {"a", "b", "c", "d", "e", "f", "g",
-                    "h", "i", "j", "k", "l", "m", "n", "o", "p", "q",
-                    "r", "s", "t", "u", "v", "w", "x", "y", "z"};
-
-                    for (int i = 0; i < abc.Length; i++)
-                    {
-                        for (int j = 0; j < abc.Length; j++)
-                        {                   
-                            name = "x" + abc[i] + abc[j];
-                            pathInput = @$"{name}";
-                            fiInput = new FileInfo(pathInput);
+                    if (fiA.Exists)
+                    {   
+                        Console.WriteLine($"Найден файл {name}.txt");
+                     // ищу файл output.txt
+                        string pathB = @"wordlist\output.txt";
+                        FileInfo fiB = new FileInfo(pathB);
+                        
+                        if (fiB.Exists)
+                        {   
+                            Console.WriteLine("Найден файл output.txt");
+                         //копирую содержимое двух файлов в два списка
+                            List<string> bufferA = new List<string>();
+                            List<string> bufferB = new List<string>();
                             
-                            if (fiInput.Exists)
+                            using (StreamReader srA = new StreamReader(pathA, System.Text.Encoding.Default))
                             {
-                                Console.WriteLine($"Файл {name} найден");
-                                File.Move(name, "input.txt");
-                                break;
+                                string lineA;
+                                while ((lineA = await srA.ReadLineAsync()) != null)
+                                {
+                                    if (lineA.Length > 7) {                                        
+                                        if (!bufferA.Exists(p => p == lineA))
+                                        {
+                                            bufferA.Add(lineA);
+                                        }
+                                    }                                       
+                                }
+                            }
+
+                            Console.WriteLine($"bufferA = {bufferA.Count}");
+                            
+                            using (StreamReader srB = new StreamReader(pathB, System.Text.Encoding.Default))
+                            {
+                                string lineB;
+                                while ((lineB = await srB.ReadLineAsync()) != null)
+                                {
+                                    bufferB.Add(lineB);
+                                }
+                            }
+
+                            Console.WriteLine($"bufferB = {bufferB.Count}");
+                            
+                            //Извлекаю из первого файла слова больше семи символов и без дубликатов
+                            foreach (string itemA in bufferA)
+                            {
+                                if (itemA.Length > 7)
+                                {
+                                    if (!bufferB.Exists(p => p == itemA))
+                                    {
+                                        using (StreamWriter sw = new StreamWriter(pathB, true, System.Text.Encoding.Default))
+                                        {
+                                            sw.WriteLine(itemA);
+                                        }
+                                        //Console.WriteLine(itemA);
+                                    }
+                                }
+                            }
+
+                            File.Delete(pathA);
+
+                            if (!File.Exists(pathA))
+                            {
+                                Console.WriteLine($"Файл {name} отфильтрован и удален.");
+                                Console.WriteLine("");
                             }
                         }
-                    }
-                }
-
-                //проверяю существование файла output.txt
-                //при необходимости создаю новый               
-                if (fiOutput.Exists)
-                {
-                    Console.WriteLine("Файл output.txt найден.");
-                    //копирую содержимое файла output.txt в буффер
-                    using (StreamReader srOutput = new StreamReader(pathOutput, System.Text.Encoding.Default))
-                    {
-                        string lineOutput;
-                        while ((lineOutput = await srOutput.ReadLineAsync()) != null)
+                        else
                         {
-                            buffer.Add(lineOutput);                    
+                            Console.WriteLine("Файл output.txt не найден.");
                         }
                     }
-                }
-                else 
-                {
-                    Console.WriteLine("Файл output.txt не найден.");
-                    fiOutput.Create(); 
-                    if (fiOutput.Exists)
-                    {
-                        Console.WriteLine("Файл output.txt создан.");
-                    }              
-                    else
-                    {
-                        Console.WriteLine("Файл output.txt не удалось создать.");
-                    }
-                }
-
-                //асинхронное построчное чтение
-                //добавляю в buffer слова длиннее семи символов и исключая дубликаты
-                using (StreamReader srInput = new StreamReader(pathInput, System.Text.Encoding.Default))
-                {
-                    string lineInput;
-                    while ((lineInput = await srInput.ReadLineAsync()) != null)
-                    {
-                        if (lineInput.Length > 7) {
-                            if (!buffer.Exists(p => p == lineInput))
-                            {
-                                buffer.Add(lineInput);
-                                Console.WriteLine($"{lineInput}");
-                            }
-                        }                     
-                    }
-                }
-                //копирую результат фильтрации файла input.txt (содержимое buffer) в output.txt. 
-                using (StreamWriter sw = new StreamWriter(pathOutput, false, System.Text.Encoding.Default))
-                {
-                    foreach (var item in buffer)
-                    {
-                        sw.WriteLine(item);
-                    }
-                } 
-                //удаляю файл input.txt
-                File.Delete(pathInput);
-                FileInfo fi = new FileInfo(pathInput);
-                
-                if (fi.Exists)
-                {
-                Console.WriteLine("");
-                Console.WriteLine("!!!!   Файл input.txt не был удален.   !!!!");
-                }
-                else
-                {
-                Console.WriteLine("");
-                Console.WriteLine("");
-                Console.WriteLine("");
-                Console.WriteLine("");
-                Console.WriteLine("");
-                Console.WriteLine("");
-                Console.WriteLine("");
-                Console.WriteLine("");
-                Console.WriteLine("");
-                Console.WriteLine("");
-                Console.WriteLine("Файл input.txt удален.");
-                Console.WriteLine("");
-                Console.WriteLine("XXXXXXXXXX  XX      XX");  
-                Console.WriteLine("XXXXXXXXXX  XX    XX");
-                Console.WriteLine("XX      XX  XX  XX");
-                Console.WriteLine("XX      XX  XXXX");
-                Console.WriteLine("XX      XX  XX  XX");  
-                Console.WriteLine("XXXXXXXXXX  XX    XX"); 
-                Console.WriteLine("XXXXXXXXXX  XX      XX");
                 }
             }
-            while (true);              
-        }
+        }       
     }
 }
